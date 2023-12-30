@@ -1,9 +1,9 @@
 
-# imports important for Airflow
+# imports Airflow
 import pendulum
 from airflow.decorators import dag, task
 
-# Import Modules for code
+# import modules
 import json
 import requests
 import pandas as pd
@@ -15,31 +15,34 @@ import time as t
 from transformer import transform_Mitsubishi
 
 
-# [START instantiate_dag]
+# instance DAG
 @dag(
     schedule_interval=None,                             #interval how often the dag will run (can be cron expression as string)
     start_date=pendulum.datetime(2023, 12, 28, tz="UTC"), # from what point on the dag will run (will only be scheduled after this date)
     catchup=False,                                      # no catchup needed, because we are running an api that returns now values                
     tags=['EmilianoRegazzoni'],                      # tag the DAQ so it's easy to find in AirflowUI
 )
+
+# define ETL job
+
 def ETLMitsubishi():
     """
     (https://airflow.apache.org/docs/apache-airflow/stable/tutorial_taskflow_api.html)
     """
 
-    # EXTRACT: Query the info from twelvedata, the endpoint price which says the price of a share right now
+    # EXTRACT: Query the info from twelvedata, the endpoint /price which says the price of a share right now
     @task()
     def extract():
 
-        payload = {'symbol': 'MSBHF', 'apikey': '6af9514997a34911a0444f72c165da56'}
-        r = requests.get("http://api.twelvedata.com/price?", params=payload)
+        info = {'symbol': 'MSBHF', 'apikey': '6af9514997a34911a0444f72c165da56'}
+        r = requests.get("http://api.twelvedata.com/price?", params=info)
 
         # Get the json
         r_string = r.json()
         print(r_string)
         return r_string
  
-    # TRANSFORM: Transform the API response, date and time aggregated to load to database
+    # TRANSFORM: Transform the API response, date and time added to load to database
     @task()
     def transform(mitsubishi_json: json):
 

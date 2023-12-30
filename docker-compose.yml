@@ -274,7 +274,7 @@ services:
   
   portainer:
     image: portainer/portainer:latest
-    container_name: portainer
+    container_name: portainer3
     restart: on-failure
     ports:
       - 9000:9000

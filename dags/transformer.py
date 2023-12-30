@@ -5,8 +5,6 @@ import datetime as dt
 
 def transform_Mitsubishi(im_json : str):
     
-    print(im_json)
-
     # load the string into a json object
     api_json = json.loads(im_json)
 
