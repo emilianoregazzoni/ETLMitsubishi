@@ -1,2 +1,2 @@
-# mitsubishi
-ETL job transformation using Airflow, Python, Google finance API, Docker and postgres
+# ETLMitsubishi
+ETL job transformation using Airflow, TaskFlow API, Python, twelvedata API, Docker and PostgreSQL
