@@ -17,10 +17,10 @@ from transformer import transform_Mitsubishi
 
 # instance DAG
 @dag(
-    schedule_interval=None,                             #interval how often the dag will run (can be cron expression as string)
-    start_date=pendulum.datetime(2023, 12, 28, tz="UTC"), # from what point on the dag will run (will only be scheduled after this date)
-    catchup=False,                                      # no catchup needed, because we are running an api that returns now values                
-    tags=['EmilianoRegazzoni'],                      # tag the DAQ so it's easy to find in AirflowUI
+    schedule_interval=None,                             
+    start_date=pendulum.datetime(2023, 12, 28, tz="UTC"), 
+    catchup=False,                                          
+    tags=['EmilianoRegazzoni'],                      
 )
 
 # define ETL job
