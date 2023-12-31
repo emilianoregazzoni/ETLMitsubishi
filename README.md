@@ -3,7 +3,7 @@
 
 In this project I worked with information about Mitsubishi shares. The goal here was to develop an ETL job using Airflow, Python and other tools. The basic Extract, Transform and Load process is represented here.
 
-## 1.Googling and research about the API to use.
+## 1. Googling and research about the API to use.
 
 First of all I needed a good finance API to get the information from shares. In this case I was interested on the price of Mitsubishi shares. I tried Google Finance API and API Layer but later I found a better place called twelvedata.com which offers a lot of endpoints to get information about real time price, forecasting and more.
 
@@ -35,7 +35,7 @@ The information is perfect, the API works fine, this is the only origin source o
 
 
 
-## 2.Python, Airflow, Docker, PostgreSQL and TaskFlow API 
+## 2. Python, Airflow, Docker, PostgreSQL and TaskFlow API 
 
 My target here was to develop an easy ETL job but using interesting tools like Airflow, Python, Docker and more, so I just took the price of the share from the API and then I created a variable in Python which takes the date and time from the operating system. This was the information stored into database.
 
@@ -226,7 +226,7 @@ Finally I checked the database:
 
 The information is ok in the database too. I had the information available in PostgreSQL.
 
-## 3.Conclusions 
+## 3. Conclusions 
 
 This ETL transformation project using Python, Airflow, Docker, and various other technologies has been a highly productive and enriching experience for me.
 Throughout this work, we've demonstrated the effectiveness of the chosen technologies for data transformation, automating processes with Airflow, and ensuring portability and scalability with Docker. However, this venture is merely the beginning, as the field of data engineering is infinitely expansive.
