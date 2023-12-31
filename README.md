@@ -1,4 +1,4 @@
-# ETLMitsubishi
+# ETLMitsubishi :car: :japan:
 ## __ETL job transformation using Airflow, TaskFlow API, Python, twelvedata API, Docker and PostgreSQL__ 
 
 In this project I worked with information about Mitsubishi shares. The goal here was to develop an ETL job using Airflow, Python and other tools. The basic Extract, Transform and Load process is represented here.
