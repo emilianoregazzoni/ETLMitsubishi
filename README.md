@@ -93,6 +93,137 @@ I decided to create a simple database called “mitsubishi”, and one table cal
 
 “price” refers the value I get from twelvedata API and “timestamp” is a variable that I created on Python that refers to the time and hour I called the API.
 
+### 2.2 Python
+
+Then I decided to use the Taskflow API to work with in Airflow.
+Taskflow allows the users to write Python code rather than Airflow code, it is more legible and easy to understand than Airflow code.
+Airflow 2.0 provides a decorator called @task that internally transforms any Python function into a PythonOperator. 
+One of the most important things using @task is that you can finally pass data from one task to another without having to write any XComs logic.
+When I added the decorator @task, Airflow knows that the functions are tasks and it should be treated as ones.
+I found this awesome article from Anna Geller (Thanks a lot Anna!) which helped me a lot to understand this new approach from Airflow 2.0:
+https://towardsdatascience.com/taskflow-api-in-apache-airflow-2-0-should-you-use-it-d6cc4913c24c
+
+Then I created three @tasks which represent the whole process (Extract, Transform and Load)
+
+```
+# define ETL job
+def ETLMitsubishi():
+
+    # EXTRACT: Query the info from twelvedata, the endpoint /price which says the price of a share right now
+    @task()
+    def extract():
+
+        info = {'symbol': 'MSBHF', 'apikey': '*** YOUR API KEY ***'}
+        r = requests.get("http://api.twelvedata.com/price?", params=info)
+
+        # Get the json
+        r_string = r.json()
+        print(r_string)
+        return r_string
+```
+Here I made the request to the API from twelvedata and convert into JSON, then the function return it.
+
+Then I created a function to transform the data, the main transformation here is to take the price of a share and add the datetime the request was made. Then the function return a dictionary.
+
+```
+ # TRANSFORM: Transform the API response, date and time added to load to database
+    @task()
+    def transform(mitsubishi_json: json):
+
+        mitsubishi_str = json.dumps(mitsubishi_json)
+        transformed_str = transform_Mitsubishi(mitsubishi_str)
+
+        # turn string into dictionary
+        ex_dict = json.loads(transformed_str)
+        print(ex_dict)
+        return ex_dict   
+```
+
+The third function is used to load the dictionary created and store the data into the database.
+
+```
+# Save the data into Postgres database
+    @task()
+    def load(mitsubishi_data: dict):
+
+        try:
+            connection = psycopg2.connect(user="airflow",
+                                        password="airflow",
+                                        host="postgres",
+                                        port="5432",
+                                        database="mitsubishi")
+            cursor = connection.cursor()
+            postgres_insert_query = """INSERT INTO mitsubishi_info (price, timestamp) VALUES ( %s, %s );"""
+            print(postgres_insert_query)
+
+            record_to_insert = (mitsubishi_data[0]["price"],mitsubishi_data[0]["timestamp"] ) # let , so python can understand is a record with 1 column
+            
+            cursor.execute(postgres_insert_query, record_to_insert)
+            connection.commit()
+            count = cursor.rowcount
+            print(count, "Record inserted successfully")
+
+        except (Exception, psycopg2.Error) as error:
+            
+            print("Failed to insert record into tableeee", error)
+            
+            if connection:
+                cursor.close()
+                connection.close()
+                print("Connection is closed")
+            
+            raise Exception(error)
+        finally:
+            # close db
+            if connection:
+                cursor.close()
+                connection.close()
+                print("Connection is closed")  
+```
+
+Finally the flow was this:
+
+```
+    # Defining the flow in Airflow
+    mitsubishi_data = extract()
+    mitsubishi_summary = transform(mitsubishi_data)
+    load(mitsubishi_summary)
+
+# call the DAG
+mitsubishi_dag_posgres = ETLMitsubishi() 
+```
+I created a variable called mitsubishi_data which had the information I got from function extract (price of the share). Then the variable mitsubishi_summary had the information transformed and it returned a dictionary. Finally I called the load function to save the dictionary into the database.
+
+I tried some times the DAG manually:
+![image](https://github.com/emilianoregazzoni/ETLMitsubishi/assets/20979227/76adf757-d37b-43f6-8457-f82d2c04f1da)
+
+Then in Airflow it looked like this:
+
+![image](https://github.com/emilianoregazzoni/ETLMitsubishi/assets/20979227/f51a8be4-e4a9-46e8-aa47-076a96225301)
+
+All the executions were successfully.
+
+Then I checked the logs, the best way to see if it is everything ok in the back, for example extract log:
+
+![image](https://github.com/emilianoregazzoni/ETLMitsubishi/assets/20979227/8ca21096-d4b4-4ccd-aa9e-bcf957224d6b)
+
+It shows exactly the information I requested on the API call.
+
+Then I checked the transform log:
+
+![image](https://github.com/emilianoregazzoni/ETLMitsubishi/assets/20979227/04dc2af0-55f9-48d1-a4ba-3731be4a51e5)
+
+Here I observed the transformation I made, add the time and hour to the value of the share, then returned the dictionary.
+
+After that I checked the info was stored perfectly.
+
+![image](https://github.com/emilianoregazzoni/ETLMitsubishi/assets/20979227/cde4c99e-71fa-4f8d-815b-4a62f818178c)
+
+Finally I checked the database:
+
+![image](https://github.com/emilianoregazzoni/ETLMitsubishi/assets/20979227/00faf59e-ce0e-4f84-a982-c388f1b425b2)
+
+The information is ok in the database too. I had the information available in PostgreSQL.
 
 
 
