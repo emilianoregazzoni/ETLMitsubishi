@@ -47,6 +47,7 @@ My target here was to develop an easy ETL job but using interesting tools like A
 The file I used is a typical docker compose file which defines the structure I wanted for the project. You can find more resources about that here:
 
 https://airflow.apache.org/docs/apache-airflow/stable/howto/docker-compose/index.html
+
 https://airflow.apache.org/docs/docker-stack/build.html
 
 Or you can search on the internet any docker compose file which gives you an instance for airflow, postgres and redis, you can use it too. This is for setup your environment.
