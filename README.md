@@ -196,6 +196,7 @@ mitsubishi_dag_posgres = ETLMitsubishi()
 I created a variable called mitsubishi_data which had the information I got from function extract (price of the share). Then the variable mitsubishi_summary had the information transformed and it returned a dictionary. Finally I called the load function to save the dictionary into the database.
 
 I tried some times the DAG manually:
+
 ![image](https://github.com/emilianoregazzoni/ETLMitsubishi/assets/20979227/76adf757-d37b-43f6-8457-f82d2c04f1da)
 
 Then in Airflow it looked like this:
