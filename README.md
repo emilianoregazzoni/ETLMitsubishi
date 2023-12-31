@@ -229,7 +229,9 @@ The information is ok in the database too. I had the information available in Po
 ## 3. Conclusions 
 
 This ETL transformation project using Python, Airflow, Docker, and various other technologies has been a highly productive and enriching experience for me.
+
 Throughout this work, I have demonstrated the effectiveness of the chosen technologies for data transformation, automating processes with Airflow, and ensuring portability and scalability with Docker. However, this venture is merely the beginning, as the field of data engineering is infinitely expansive.
 In summary, this work has not only been a test of our technical skills but also a reminder of the vast possibilities in data engineering. Curiosity and continuous learning are essential in this dynamically evolving field.
+
 I would like to express gratitude to Andreas Kretz for his invaluable contribution and dedication to teaching to all data engineering enthusiast around the world. Some parts of my project took valuable ideas from his academy as an input, which not only provided a solid conceptual foundation but also inspired me to explore and apply those insights in a practical context.
 
