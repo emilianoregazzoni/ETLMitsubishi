@@ -98,9 +98,9 @@ I decided to create a simple database called “mitsubishi”, and one table cal
 
 Then I decided to use the Taskflow API to work with in Airflow.
 Taskflow allows the users to write Python code rather than Airflow code, it is more legible and easy to understand than Airflow code.
-Airflow 2.0 provides a decorator called @task that internally transforms any Python function into a PythonOperator. 
-One of the most important things using @task is that you can finally pass data from one task to another without having to write any XComs logic.
-When I added the decorator @task, Airflow knows that the functions are tasks and it should be treated as ones.
+
+Airflow 2.0 provides a decorator called @task that internally transforms any Python function into a PythonOperator. One of the most important things using @task is that you can finally pass data from one task to another without having to write any XComs logic.When I added the decorator @task, Airflow knows that the functions are tasks and it should be treated as ones.
+
 I found this awesome article from Anna Geller (Thanks a lot Anna!) which helped me a lot to understand this new approach from Airflow 2.0:
 https://towardsdatascience.com/taskflow-api-in-apache-airflow-2-0-should-you-use-it-d6cc4913c24c
 
